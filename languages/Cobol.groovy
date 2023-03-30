@@ -363,7 +363,9 @@ def createLinkEditCommand(String buildFile, LogicalFile logicalFile, String memb
 				if (buildUtils.isCICS(logicalFile)) {
 				linkedit.dd(new DDStatement().name("SYSLMOD").dsn("${props.cobol_loadcicsPDS}($member)").options('shr').output(true).deployType(deployType))
 				}
-				{linkedit.dd(new DDStatement().name("SYSLMOD").dsn("${props.cobol_loadPDS}($member)").options('shr').output(true).deployType(deployType))
+				else
+				{
+					linkedit.dd(new DDStatement().name("SYSLMOD").dsn("${props.cobol_loadPDS}($member)").options('shr').output(true).deployType(deployType))
 				}
 	}
 	linkedit.dd(new DDStatement().name("SYSPRINT").options(props.cobol_printTempOptions))
