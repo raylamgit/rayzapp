@@ -13,8 +13,10 @@ import com.ibm.dbb.build.report.records.*
 @Field def buildUtils= loadScript(new File("${props.zAppBuildDir}/utilities/BuildUtilities.groovy"))
 @Field def impactUtils= loadScript(new File("${props.zAppBuildDir}/utilities/ImpactUtilities.groovy"))
 @Field def bindUtils= loadScript(new File("${props.zAppBuildDir}/utilities/BindUtilities.groovy"))
+@Field def sysprintUtils= loadScript(new File("${props.zAppBuildDir}/utilities/SysprintUtilities.groovy"))
 	
 println("** Building files mapped to ${this.class.getName()}.groovy script")
+println("***** Ray Lam testing Sysprint Util at Cobol.groovy")
 
 // verify required build properties
 buildUtils.assertBuildProperties(props.cobol_requiredBuildProperties)
@@ -63,10 +65,18 @@ sortedList.each { buildFile ->
 	// execute mvs commands in a mvs job
 	MVSJob job = new MVSJob()
 	job.start()
+	
+	//Ray Lam get headersPDS from application-conf -> Cobol.properties
+	String headersPDS = props.getFileProperty('cobol_dbb_headersPDS', buildFile)
+	println "***** Ray Lam get headersPDS file name -> $headersPDS"
 
 	// compile the cobol program
 	int rc = compile.execute()
 	int maxRC = props.getFileProperty('cobol_compileMaxRC', buildFile).toInteger()
+	
+	// Ray Lam After Compile, Just for the Compile listing props.cobol_listPDS
+	printPDS = sysprintUtils.copy2PDS(props.cobol_listPDS, member, logFile)
+	println "***** Ray Lam copied Compile listing for IBM Debugger  -> $printPDS \n "
 
 	boolean bindFlag = true
 
