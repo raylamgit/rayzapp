@@ -498,8 +498,8 @@ def createLanguageDatasets(String lang) {
 	//Ray Lam
 	if (props."${lang}_prnDatasets")
 		createDatasets(props."${lang}_prnDatasets".split(','), props."${lang}_prnOptions")
-	if (props."${lang}_listDatasets")
-		createDatasets(props."${lang}_listDatasets".split(','), props."${lang}_listOptions")	
+	//if (props."${lang}_listDatasets")
+	//	createDatasets(props."${lang}_listDatasets".split(','), props."${lang}_listOptions")	
 }
 
 /*
