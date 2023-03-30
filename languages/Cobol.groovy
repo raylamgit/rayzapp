@@ -98,6 +98,9 @@ sortedList.each { buildFile ->
 		
 		String needsLinking = props.getFileProperty('cobol_linkEdit', buildFile)
 		if (needsLinking.toBoolean()) {
+			//Ray Lam Linkedit Header
+			headLine = "LINKEDIT"
+			printPDS = sysprintUtils.headLines(logFile, headLine, headersPDS)
 			rc = linkEdit.execute()
 			maxRC = props.getFileProperty('cobol_linkEditMaxRC', buildFile).toInteger()
 
@@ -135,6 +138,17 @@ sortedList.each { buildFile ->
 			buildUtils.updateBuildResult(errorMsg:errorMsg,logs:["${member}_bind.log":bindLogFile])
 		}
 	}
+	
+    //Ray Lam  ad end of job comments
+	def String printPDS	
+	headLine = "COMMENTS"
+	
+	//printPDS = sysprintUtils.copySysprint(buildFile, props.cobol_prnPDS, member, logFile, headLine)
+	printPDS = sysprintUtils.headLines(logFile, headLine, headersPDS)
+		
+	// Straight call to copy2PDS for Sysprint for -compile -linkedit and end of job
+	printPDS = sysprintUtils.copy2PDS(props.cobol_prnPDS, member, logFile)
+	println "***** Ray Lam copied logfile to PDS -> $printPDS \n "
 
 	// clean up passed DD statements
 	job.stop()
