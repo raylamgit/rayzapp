@@ -475,16 +475,7 @@ def scanOnlyStaticDependencies(List buildList){
 				if ((isLinkEdited && isLinkEdited.toBoolean()) || scriptMapping == "LinkEdit.groovy"){
 					try{
 						if (props.verbose) println ("*** Scanning load module $loadPDSMember of $buildFile")
-						//Ray Lam checl CICSLOAD or LOAD
-						println ("***** Ray Lam  Scanning load module $loadPDSMember of $buildFile")
-						if (buildUtils.isCICS(logicalFile) {
-						println ("***** Ray Lam  Scanning CICSLOAD")
-						saveStaticLinkDependencies(buildFile, props."${langPrefix}_loadcicsPDS", logicalFile)
-						}
-						    else {
-							    println ("***** Ray Lam  Scanning Regualtr LOAD")
-						saveStaticLinkDependencies(buildFile, props."${langPrefix}_loadPDS", logicalFile)  
-						    }	    
+						saveStaticLinkDependencies(buildFile, props."${langPrefix}_loadPDS", logicalFile)
 					}
 					catch (com.ibm.dbb.build.ValidationException e){
 						println ("!* Error scanning output file for $buildFile  : $loadPDSMember")
