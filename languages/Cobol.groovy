@@ -335,6 +335,24 @@ def createLinkEditCommand(String buildFile, LogicalFile logicalFile, String memb
 		if (ssi != null) parms = parms + ",SSI=$ssi"
 	}
 	
+	//Ray Lam testing LINKEDIT
+	String processorFile = props.getFileProperty('processorSearchPath', buildFile)
+	
+	println "***** Ray Lam Processor file for at LINKEDIT $buildFile = $processorFile"
+	
+	String processorMember = "${processorFile}/${member}.pro"
+	println("***** Ray Lam Testing LINKEDIT ")
+	String Option1 = "LINKPARM"
+	String Option2 = "AMODE"
+	cobolOptions = compileUtils.compileParms(processorMember,member,Option1,Option2)
+	
+	println("***** Ray Lam Checking CompileUtil return  at LINKEDIT-> ${cobolOptions}")
+	
+	// Ray Lam add RMODE to the parms
+	parms = parms + ",$cobolOptions"
+	
+	println("***** Ray Lam modifying LINKEDIT PARMS -> ${parms}")
+
 	if (props.verbose) println "Link-Edit parms for $buildFile = $parms"
 	
 	// define the MVSExec command to link edit the program
