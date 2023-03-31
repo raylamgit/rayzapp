@@ -16,7 +16,7 @@ import com.ibm.dbb.build.report.records.*
 @Field def sysprintUtils= loadScript(new File("${props.zAppBuildDir}/utilities/SysprintUtilities.groovy"))
 	
 println("** Building files mapped to ${this.class.getName()}.groovy script")
-println("***** Ray Lam testing Sysprint Util at Cobol.groovy")
+println("***** Ray Lam testing sysprintUtil and compileUtil at Cobol.groovy")
 
 // verify required build properties
 buildUtils.assertBuildProperties(props.cobol_requiredBuildProperties)
@@ -59,6 +59,20 @@ sortedList.each { buildFile ->
 	File logFile = new File( props.userBuild ? "${props.buildOutDir}/${member}.log" : "${props.buildOutDir}/${member}.cobol.log")
 	if (logFile.exists())
 		logFile.delete()
+	
+	// Ray Lam Testing compileUtilities 
+	String ProcessorParm = props.getFileProperty('processorSearchPath', buildFile)
+	println "***** Ray Lam Processor parms for $buildFile = $ProcessorParm"
+	
+	println "***** Ray Lam call compileUtils"
+	
+	String processorMember = "${ProcessorParm}/${member}.pro"
+	String Option1 = "COBOL"
+	String Option2 = "OPTIONS"
+	cobolOptions = compileUtils.compileParms(processorMember,member,Option1,Option2)
+	println "***** Ray Lam after returned from compileUtils Json file -> $cobolOptions \n "
+
+
 	MVSExec compile = createCompileCommand(buildFile, logicalFile, member, logFile)
 	MVSExec linkEdit = createLinkEditCommand(buildFile, logicalFile, member, logFile)
 
@@ -66,6 +80,8 @@ sortedList.each { buildFile ->
 	MVSJob job = new MVSJob()
 	job.start()
 	
+	
+	// Ray Lam Testing sysprintUtilities 
 	//Ray Lam get headersPDS from application-conf -> Cobol.properties
 	String headersPDS = props.getFileProperty('cobol_dbb_headersPDS', buildFile)
 	println "***** Ray Lam get headersPDS file name -> $headersPDS"
